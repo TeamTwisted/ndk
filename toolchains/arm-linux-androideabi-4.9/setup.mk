@@ -37,7 +37,7 @@ TARGET_C_INCLUDES := \
 
 ifneq ($(filter $(TARGET_ARCH_ABI), armeabi-v7a armeabi-v7a-hard),)
     TARGET_CFLAGS += -march=armv7-a \
-                     -mfpu=vfpv3-d16
+                     -mfpu=neon-vfpv4
     TARGET_LDFLAGS += -march=armv7-a \
                      -Wl,--fix-cortex-a8
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
@@ -55,10 +55,9 @@ else
                             -msoft-float
 endif
 
-TARGET_CFLAGS.neon := -mfpu=neon
+TARGET_CFLAGS.neon := -mfpu=neon-vfpv4
 
 TARGET_arm_release_CFLAGS :=  -O2 \
-                              -g \
                               -DNDEBUG \
                               -fomit-frame-pointer \
                               -fstrict-aliasing    \
@@ -67,7 +66,6 @@ TARGET_arm_release_CFLAGS :=  -O2 \
 
 TARGET_thumb_release_CFLAGS := -mthumb \
                                -Os \
-                               -g \
                                -DNDEBUG \
                                -fomit-frame-pointer \
                                -fno-strict-aliasing \
@@ -75,14 +73,10 @@ TARGET_thumb_release_CFLAGS := -mthumb \
 
 # When building for debug, compile everything as arm.
 TARGET_arm_debug_CFLAGS := $(TARGET_arm_release_CFLAGS) \
-                           -O0 \
-                           -UNDEBUG \
                            -fno-omit-frame-pointer \
                            -fno-strict-aliasing
 
 TARGET_thumb_debug_CFLAGS := $(TARGET_thumb_release_CFLAGS) \
-                             -O0 \
-                             -UNDEBUG \
                              -marm \
                              -fno-omit-frame-pointer
 
