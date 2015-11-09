@@ -57,27 +57,29 @@ endif
 
 TARGET_CFLAGS.neon := -mfpu=neon-vfpv4
 
-TARGET_arm_release_CFLAGS :=  -O2 \
+# Both release and debug are compiled with the arm instruction set to 
+# provide better performance than the thumb/thumb2 instruction set.
+TARGET_arm_release_CFLAGS :=  -marm\
+			      -O3 \
+			      -g0
                               -DNDEBUG \
                               -fomit-frame-pointer \
                               -fstrict-aliasing    \
                               -funswitch-loops     \
                               -finline-limit=300
 
-TARGET_thumb_release_CFLAGS := -mthumb \
-                               -Os \
+TARGET_thumb_release_CFLAGS := -marm \
+                               -O3 \
                                -DNDEBUG \
                                -fomit-frame-pointer \
                                -fno-strict-aliasing \
                                -finline-limit=64
 
-# When building for debug, compile everything as arm.
 TARGET_arm_debug_CFLAGS := $(TARGET_arm_release_CFLAGS) \
                            -fno-omit-frame-pointer \
                            -fno-strict-aliasing
 
 TARGET_thumb_debug_CFLAGS := $(TARGET_thumb_release_CFLAGS) \
-                             -marm \
                              -fno-omit-frame-pointer
 
 # This function will be called to determine the target CFLAGS used to build
